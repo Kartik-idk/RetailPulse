@@ -104,6 +104,15 @@ def apply_dark_theme(fig: plt.Figure, ax: plt.Axes, title: str = "") -> None:
         )
 
 
+def _set_window_title(fig: plt.Figure, title: str) -> None:
+    """Set window title if GUI canvas manager is available."""
+    if hasattr(fig.canvas, "manager") and fig.canvas.manager is not None:
+        try:
+            fig.canvas.manager.set_window_title(f"RetailPulse - {title}")
+        except Exception:
+            pass
+
+
 def _draw_empty_placeholder(ax: plt.Axes, message: str = "No Data Available") -> None:
     """Display a centered fallback message on an empty axis."""
     ax.text(
@@ -208,11 +217,13 @@ def plot_monthly_revenue_trend(
         )
 
     if standalone:
+        _set_window_title(fig, "Monthly Revenue Trend")
         plt.tight_layout()
         if save_path:
             fig.savefig(save_path, facecolor=THEME["main_bg"], bbox_inches="tight")
         if show:
             plt.show()
+            plt.close(fig)
 
     return fig, ax
 
@@ -284,11 +295,13 @@ def plot_revenue_by_category(
         )
 
     if standalone:
+        _set_window_title(fig, "Revenue by Product Category")
         plt.tight_layout()
         if save_path:
             fig.savefig(save_path, facecolor=THEME["main_bg"], bbox_inches="tight")
         if show:
             plt.show()
+            plt.close(fig)
 
     return fig, ax
 
@@ -373,11 +386,13 @@ def plot_branch_performance(
         )
 
     if standalone:
+        _set_window_title(fig, "Branch Performance & Revenue")
         plt.tight_layout()
         if save_path:
             fig.savefig(save_path, facecolor=THEME["main_bg"], bbox_inches="tight")
         if show:
             plt.show()
+            plt.close(fig)
 
     return fig, ax
 
@@ -472,11 +487,13 @@ def plot_payment_distribution(
     )
 
     if standalone:
+        _set_window_title(fig, "Payment Method Distribution")
         plt.tight_layout()
         if save_path:
             fig.savefig(save_path, facecolor=THEME["main_bg"], bbox_inches="tight")
         if show:
             plt.show()
+            plt.close(fig)
 
     return fig, ax
 
@@ -570,11 +587,13 @@ def plot_customer_type_distribution(
     )
 
     if standalone:
+        _set_window_title(fig, "Customer Type Distribution")
         plt.tight_layout()
         if save_path:
             fig.savefig(save_path, facecolor=THEME["main_bg"], bbox_inches="tight")
         if show:
             plt.show()
+            plt.close(fig)
 
     return fig, ax
 
@@ -645,11 +664,13 @@ def plot_gross_income_by_category(
         )
 
     if standalone:
+        _set_window_title(fig, "Gross Income by Category")
         plt.tight_layout()
         if save_path:
             fig.savefig(save_path, facecolor=THEME["main_bg"], bbox_inches="tight")
         if show:
             plt.show()
+            plt.close(fig)
 
     return fig, ax
 
@@ -732,11 +753,13 @@ def plot_rating_analysis(
     ax.legend(loc="lower right", frameon=False, fontsize=8, labelcolor=THEME["text_secondary"])
 
     if standalone:
+        _set_window_title(fig, "Customer Rating Analysis")
         plt.tight_layout()
         if save_path:
             fig.savefig(save_path, facecolor=THEME["main_bg"], bbox_inches="tight")
         if show:
             plt.show()
+            plt.close(fig)
 
     return fig, ax
 
@@ -962,6 +985,8 @@ def render_complete_dashboard(
     ax6 = fig.add_subplot(charts_r2[0, 2])
     plot_gross_income_by_category(records, ax=ax6, show=False)
 
+    _set_window_title(fig, "Executive Sales Analytics Dashboard")
+
     # Export figure if save path is provided
     if save_path:
         fig.savefig(save_path, facecolor=THEME["main_bg"], edgecolor="none", dpi=120)
@@ -969,5 +994,6 @@ def render_complete_dashboard(
     # Interactive display
     if show:
         plt.show()
+        plt.close(fig)
 
     return fig

@@ -157,5 +157,5 @@ The application utilizes the historical **Supermarket Sales** dataset.
 - [x] **Milestone 2:** Dataset Acquisition & Verification
 - [x] **Milestone 3:** Core Data Loading & Processing Modules
 - [x] **Milestone 4:** Matplotlib Visualizations & Dashboard Layout
-- [ ] **Milestone 5:** Terminal Interface Integration
+- [x] **Milestone 5:** Terminal Interface Integration
 - [ ] **Milestone 6:** Final Testing, Verification, and Documentation
