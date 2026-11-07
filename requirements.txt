@@ -1,0 +1,4 @@
+# RetailPulse - External Dependencies
+# All data processing uses Python's standard library (csv, datetime, pathlib).
+# Matplotlib is the sole external dependency for visualizations.
+matplotlib>=3.8.0
