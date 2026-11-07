@@ -153,7 +153,7 @@ The application utilizes the historical **Supermarket Sales** dataset.
 
 - [x] **Milestone 1:** Workspace and GitHub Initialization
 - [x] **Milestone 2:** Dataset Acquisition & Verification
-- [ ] **Milestone 3:** Core Data Loading & Processing Modules
+- [x] **Milestone 3:** Core Data Loading & Processing Modules
 - [ ] **Milestone 4:** Matplotlib Visualizations & Dashboard Layout
 - [ ] **Milestone 5:** Terminal Interface Integration
 - [ ] **Milestone 6:** Final Testing, Verification, and Documentation
