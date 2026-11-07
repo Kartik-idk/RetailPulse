@@ -42,7 +42,7 @@ RetailPulse/
 │
 ├── dataset/
 │   ├── .gitkeep
-│   └── supermarket_sales.csv     # Historical supermarket sales dataset
+│   └── supermarket_sales.csv     # Historical supermarket sales dataset (1,000 records)
 │
 ├── src/
 │   ├── __init__.py               # Package metadata
@@ -61,6 +61,41 @@ RetailPulse/
 ├── .gitignore                    # Git ignore specifications
 └── .venv/                        # Isolated Python virtual environment
 ```
+
+---
+
+## 📈 Dataset Information
+
+The application utilizes the historical **Supermarket Sales** dataset.
+
+- **Source:** [Kaggle - Supermarket Sales](https://www.kaggle.com/datasets/faresashraf1001/supermarket-sales)
+- **License:** Apache 2.0 (Permits redistribution and academic use)
+- **File Location:** `dataset/supermarket_sales.csv`
+- **File Size:** 140,285 bytes (~137 KB)
+- **Records:** 1,000 transactions (0 duplicates, 0 missing values)
+- **Time Horizon:** January 1, 2019 – March 30, 2019
+
+### Verified Column Schema (17 Columns)
+
+| # | Column Name | Inferred Type | Description / Sample Value |
+|---|---|---|---|
+| 0 | `Invoice ID` | `str` | Unique transaction invoice identifier (e.g., `750-67-8428`) |
+| 1 | `Branch` | `str` | Supermarket branch identifier (`Alex`, `Giza`, `Cairo`) |
+| 2 | `City` | `str` | Location of branch (`Yangon`, `Naypyitaw`, `Mandalay`) |
+| 3 | `Customer type` | `str` | Customer category (`Member`, `Normal`) |
+| 4 | `Gender` | `str` | Customer gender (`Female`, `Male`) |
+| 5 | `Product line` | `str` | Merchandise category (6 distinct lines) |
+| 6 | `Unit price` | `float` | Price per item in USD ($10.08 – $99.96) |
+| 7 | `Quantity` | `int` | Units purchased (1 – 10) |
+| 8 | `Tax 5%` | `float` | 5% tax amount applied to purchase |
+| 9 | `Sales` | `float` | Total invoice transaction amount ($10.68 – $1,042.65) |
+| 10 | `Date` | `str` / `date` | Transaction date (`%m/%d/%Y`, e.g., `1/5/2019`) |
+| 11 | `Time` | `str` / `time` | Transaction time (e.g., `1:08:00 PM`) |
+| 12 | `Payment` | `str` | Payment method (`Ewallet`, `Cash`, `Credit card`) |
+| 13 | `cogs` | `float` | Cost of goods sold ($10.17 – $993.00) |
+| 14 | `gross margin percentage` | `float` | Profit margin percentage (fixed at `4.761904762`) |
+| 15 | `gross income` | `float` | Gross profit per transaction ($0.51 – $49.65) |
+| 16 | `Rating` | `float` | Customer satisfaction rating (4.0 – 10.0) |
 
 ---
 
@@ -117,7 +152,7 @@ RetailPulse/
 ## 📋 Development Roadmap
 
 - [x] **Milestone 1:** Workspace and GitHub Initialization
-- [ ] **Milestone 2:** Dataset Acquisition & Verification
+- [x] **Milestone 2:** Dataset Acquisition & Verification
 - [ ] **Milestone 3:** Core Data Loading & Processing Modules
 - [ ] **Milestone 4:** Matplotlib Visualizations & Dashboard Layout
 - [ ] **Milestone 5:** Terminal Interface Integration
