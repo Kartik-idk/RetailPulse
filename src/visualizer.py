@@ -33,34 +33,34 @@ from src.data_processor import (
 # -----------------------------------------------------------------------------
 THEME = {
     # Backgrounds
-    "main_bg": "#0B1120",        # Deep dark navy for main window
-    "panel_bg": "#151F32",       # Contrasting dark card/panel background
-    "card_bg": "#1E293B",        # Secondary panel background
-    "border": "#2A374A",         # Clean subtle border outline
+    "main_bg": "#0B1120",        # Deep dark navy for master figure
+    "panel_bg": "#131C2E",       # Balanced dark card/panel background
+    "card_bg": "#1E293B",        # Secondary badge/accent container
+    "border": "#23334D",         # Refined subtle card outline
 
     # Accents
     "primary": "#38BDF8",        # Electric sky blue (primary accent)
-    "secondary": "#A78BFA",      # Neon purple/violet (secondary accent)
-    "mint": "#34D399",           # Positive emerald/mint (income & success)
-    "amber": "#FBBF24",          # Warm gold/amber (ratings & highlights)
+    "secondary": "#818CF8",      # Soft indigo/violet (secondary accent)
+    "mint": "#34D399",           # Emerald/mint (positive income & success)
+    "amber": "#FBBF24",          # Warm amber/gold (ratings & highlights)
     "coral": "#F472B6",          # Vibrant pink/coral (distinctions)
     "cyan": "#22D3EE",           # Vivid cyan
 
     # Typography
-    "text_primary": "#F8FAFC",   # Bright white for titles and primary numbers
-    "text_secondary": "#94A3B8", # Muted gray for axis labels and descriptions
-    "text_muted": "#64748B",     # Dim gray for secondary footnotes
+    "text_primary": "#F8FAFC",   # Bright white for titles and primary metrics
+    "text_secondary": "#94A3B8", # Muted slate for axis labels and descriptions
+    "text_muted": "#64748B",     # Dim slate for secondary footnotes
     "grid": "#1E293B",           # Subtle grid line color
 }
 
 # Distinct modern palette for multi-category charts
 CATEGORY_PALETTE = [
-    "#38BDF8",  # Electric Blue
-    "#A78BFA",  # Purple
-    "#34D399",  # Mint
-    "#FBBF24",  # Amber
-    "#F472B6",  # Coral
-    "#22D3EE",  # Cyan
+    "#38BDF8",  # Electric Sky Blue
+    "#60A5FA",  # Light Blue
+    "#818CF8",  # Soft Indigo
+    "#A78BFA",  # Lavender Purple
+    "#C084FC",  # Violet
+    "#E879F9",  # Orchid / Fuchsia
 ]
 
 
@@ -82,14 +82,14 @@ def apply_dark_theme(fig: plt.Figure, ax: plt.Axes, title: str = "") -> None:
         spine.set_linewidth(1.0)
 
     # Tick and label styling
-    ax.tick_params(colors=THEME["text_secondary"], labelsize=8.5, which="both")
+    ax.tick_params(colors=THEME["text_secondary"], labelsize=8.5, which="both", length=3.5)
     ax.xaxis.label.set_color(THEME["text_secondary"])
     ax.yaxis.label.set_color(THEME["text_secondary"])
     ax.xaxis.label.set_size(9)
     ax.yaxis.label.set_size(9)
 
     # Grid styling
-    ax.grid(True, color=THEME["grid"], linestyle="--", linewidth=0.6, alpha=0.7)
+    ax.grid(True, color=THEME["grid"], linestyle="--", linewidth=0.6, alpha=0.6)
     ax.set_axisbelow(True)
 
     # Title styling
@@ -97,9 +97,9 @@ def apply_dark_theme(fig: plt.Figure, ax: plt.Axes, title: str = "") -> None:
         ax.set_title(
             title,
             color=THEME["text_primary"],
-            fontsize=11,
+            fontsize=10.5,
             fontweight="bold",
-            pad=10,
+            pad=11,
         )
 
 
@@ -167,50 +167,54 @@ def plot_monthly_revenue_trend(
     revenues = [info["revenue"] for info in monthly_data.values()]
     x_indices = list(range(len(labels)))
 
-    # Main trend line
+    # Main trend line with distinct halo markers
     ax.plot(
         x_indices,
         revenues,
         color=THEME["primary"],
         linewidth=2.8,
         marker="o",
-        markersize=7,
-        markerfacecolor=THEME["text_primary"],
+        markersize=7.5,
+        markerfacecolor=THEME["main_bg"],
         markeredgecolor=THEME["primary"],
-        markeredgewidth=2,
+        markeredgewidth=2.2,
         label="Revenue",
         zorder=4,
     )
 
     # Soft area fill underneath
-    ax.fill_between(x_indices, revenues, color=THEME["primary"], alpha=0.18, zorder=3)
+    ax.fill_between(x_indices, revenues, color=THEME["primary"], alpha=0.15, zorder=3)
 
-    # Format Axes
+    # Format Axes with margin padding so endpoints and labels do not collide with spines
     ax.set_xticks(x_indices)
-    ax.set_xticklabels(labels, color=THEME["text_primary"], fontweight="normal")
+    ax.set_xticklabels(labels, color=THEME["text_primary"], fontweight="normal", fontsize=8.5)
     ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda val, pos: f"${val*1e-3:.0f}K"))
 
-    # Adjust vertical margin for data labels
-    min_rev, max_rev = min(revenues), max(revenues)
-    margin = (max_rev - min_rev) * 0.25 if max_rev > min_rev else 1000
-    ax.set_ylim(max(0, min_rev - margin), max_rev + margin)
+    # Horizontal boundary padding
+    ax.set_xlim(-0.35, len(labels) - 1 + 0.35)
 
-    # Value callout labels on data points
+    # Vertical margin for data labels and breathing room
+    min_rev, max_rev = min(revenues), max(revenues)
+    y_span = max_rev - min_rev if max_rev > min_rev else 5000
+    ax.set_ylim(max(0, min_rev - y_span * 0.45), max_rev + y_span * 0.40)
+
+    # Value callout labels on data points positioned cleanly above markers
     for idx, rev in enumerate(revenues):
         ax.annotate(
             f"${rev:,.0f}",
             (idx, rev),
             textcoords="offset points",
-            xytext=(0, 10),
+            xytext=(0, 11),
             ha="center",
+            va="bottom",
             fontsize=8.5,
             fontweight="bold",
             color=THEME["text_primary"],
             bbox=dict(
-                boxstyle="round,pad=0.2",
+                boxstyle="round,pad=0.25",
                 facecolor=THEME["card_bg"],
                 edgecolor=THEME["border"],
-                alpha=0.9,
+                alpha=0.95,
             ),
             zorder=5,
         )
@@ -261,13 +265,14 @@ def plot_revenue_by_category(
     # Invert so highest appears at the top
     categories = list(category_sales.keys())[::-1]
     revenues = [category_sales[c] for c in categories]
-    colors = CATEGORY_PALETTE[: len(categories)]
+    # Gradient palette aligned so top revenue bar gets the primary electric accent
+    colors = CATEGORY_PALETTE[::-1][: len(categories)]
 
     y_pos = list(range(len(categories)))
     bars = ax.barh(
         y_pos,
         revenues,
-        height=0.6,
+        height=0.52,
         color=colors,
         edgecolor=THEME["border"],
         linewidth=0.8,
@@ -277,7 +282,7 @@ def plot_revenue_by_category(
     ax.set_yticks(y_pos)
     ax.set_yticklabels(categories, color=THEME["text_primary"], fontsize=8.5)
     ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda val, pos: f"${val*1e-3:.0f}K"))
-    ax.set_xlim(0, max(revenues) * 1.22)
+    ax.set_xlim(0, max(revenues) * 1.18)
 
     # Value labels at end of bars
     for bar, val in zip(bars, revenues):
@@ -289,7 +294,7 @@ def plot_revenue_by_category(
             va="center",
             ha="left",
             color=THEME["text_primary"],
-            fontsize=8,
+            fontsize=8.5,
             fontweight="bold",
         )
 
@@ -342,14 +347,14 @@ def plot_branch_performance(
     transactions = [branches[b]["transactions"] for b in branch_names]
     ratings = [branches[b]["average_rating"] for b in branch_names]
 
-    colors = [THEME["primary"], THEME["secondary"], THEME["mint"]]
+    branch_colors = [THEME["primary"], THEME["secondary"], THEME["mint"]]
     x_pos = list(range(len(labels)))
 
     bars = ax.bar(
         x_pos,
         revenues,
-        width=0.48,
-        color=colors[: len(branch_names)],
+        width=0.46,
+        color=branch_colors[: len(branch_names)],
         edgecolor=THEME["border"],
         linewidth=0.8,
         zorder=3,
@@ -358,9 +363,9 @@ def plot_branch_performance(
     ax.set_xticks(x_pos)
     ax.set_xticklabels(labels, color=THEME["text_primary"], fontsize=8.5)
     ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda val, pos: f"${val*1e-3:.0f}K"))
-    ax.set_ylim(0, max(revenues) * 1.25)
+    ax.set_ylim(0, max(revenues) * 1.22)
 
-    # Value labels and metadata on top of bars
+    # Value labels and high-contrast metadata badges inside bars
     for bar, val, tx, rat in zip(bars, revenues, transactions, ratings):
         height = bar.get_height()
         ax.text(
@@ -375,13 +380,21 @@ def plot_branch_performance(
         )
         ax.text(
             bar.get_x() + bar.get_width() / 2,
-            height / 2,
-            f"{tx} txns\n★ {rat}",
+            height * 0.52,
+            f"{tx} txns\n★ {rat:.2f}",
             ha="center",
             va="center",
-            color=THEME["main_bg"],
+            color=THEME["text_primary"],
             fontsize=8,
             fontweight="bold",
+            bbox=dict(
+                boxstyle="round,pad=0.3",
+                facecolor=THEME["main_bg"],
+                edgecolor=THEME["border"],
+                alpha=0.65,
+                linewidth=0.6,
+            ),
+            zorder=4,
         )
 
     if standalone:
@@ -436,10 +449,10 @@ def plot_payment_distribution(
         counts,
         labels=None,
         autopct="%1.1f%%",
-        pctdistance=0.76,
+        pctdistance=0.75,
         startangle=140,
         colors=colors[: len(methods)],
-        wedgeprops=dict(width=0.42, edgecolor=THEME["panel_bg"], linewidth=2.5),
+        wedgeprops=dict(width=0.38, edgecolor=THEME["panel_bg"], linewidth=2.5),
     )
 
     for autotext in autotexts:
@@ -469,20 +482,22 @@ def plot_payment_distribution(
         color=THEME["text_secondary"],
     )
 
-    # Clean legend
+    # Compact legend formatted cleanly within subplot bounds
     legend_labels = [
-        f"{m}: {payments[m]['count']} (${payments[m]['revenue']*1e-3:.1f}K)"
+        f"{m}: {payments[m]['count']} (${payments[m]['revenue']*1e-3:.0f}K)"
         for m in methods
     ]
     ax.legend(
         wedges,
         legend_labels,
         loc="lower center",
-        bbox_to_anchor=(0.5, -0.15),
+        bbox_to_anchor=(0.5, -0.08),
         ncol=len(methods),
         frameon=False,
-        fontsize=8,
+        fontsize=7.8,
         labelcolor=THEME["text_secondary"],
+        handletextpad=0.3,
+        columnspacing=0.8,
     )
 
     if standalone:
@@ -540,7 +555,7 @@ def plot_customer_type_distribution(
         pctdistance=0.74,
         startangle=90,
         colors=colors[: len(types)],
-        wedgeprops=dict(width=0.42, edgecolor=THEME["panel_bg"], linewidth=2.5),
+        wedgeprops=dict(width=0.38, edgecolor=THEME["panel_bg"], linewidth=2.5),
     )
 
     for autotext in autotexts:
@@ -578,11 +593,13 @@ def plot_customer_type_distribution(
         wedges,
         legend_labels,
         loc="lower center",
-        bbox_to_anchor=(0.5, -0.15),
+        bbox_to_anchor=(0.5, -0.08),
         ncol=len(types),
         frameon=False,
-        fontsize=8,
+        fontsize=7.8,
         labelcolor=THEME["text_secondary"],
+        handletextpad=0.4,
+        columnspacing=1.0,
     )
 
     if standalone:
@@ -630,14 +647,19 @@ def plot_gross_income_by_category(
 
     categories = list(income_data.keys())
     incomes = [income_data[c] for c in categories]
-    # Abbreviate long category labels for clean presentation
-    display_labels = [c.replace(" and ", " & ") for c in categories]
+    # Clean two-line title-cased labels for horizontal presentation without cramped rotation
+    display_labels = [
+        c.title().replace(" And ", " &\n")
+        if " and " in c.lower()
+        else c.title().replace(" ", "\n", 1)
+        for c in categories
+    ]
 
     x_pos = list(range(len(categories)))
     bars = ax.bar(
         x_pos,
         incomes,
-        width=0.55,
+        width=0.52,
         color=THEME["mint"],
         edgecolor=THEME["border"],
         linewidth=0.8,
@@ -645,9 +667,9 @@ def plot_gross_income_by_category(
     )
 
     ax.set_xticks(x_pos)
-    ax.set_xticklabels(display_labels, color=THEME["text_primary"], fontsize=8, rotation=20, ha="right")
+    ax.set_xticklabels(display_labels, color=THEME["text_primary"], fontsize=8, rotation=0, ha="center")
     ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda val, pos: f"${val*1e-3:.1f}K"))
-    ax.set_ylim(0, max(incomes) * 1.22)
+    ax.set_ylim(0, max(incomes) * 1.20)
 
     for bar, val in zip(bars, incomes):
         height = bar.get_height()
@@ -658,7 +680,7 @@ def plot_gross_income_by_category(
             ha="center",
             va="bottom",
             color=THEME["text_primary"],
-            fontsize=8,
+            fontsize=8.5,
             fontweight="bold",
         )
 
@@ -778,12 +800,12 @@ def _render_kpi_card(
     ax.set_facecolor(THEME["main_bg"])
     ax.axis("off")
 
-    # Card background patch
+    # Card background container patch
     card_patch = FancyBboxPatch(
         (0.02, 0.04),
         0.96,
         0.92,
-        boxstyle="round,pad=0.02,rounding_size=0.08",
+        boxstyle="round,pad=0.02,rounding_size=0.06",
         facecolor=THEME["panel_bg"],
         edgecolor=THEME["border"],
         linewidth=1.1,
@@ -792,51 +814,57 @@ def _render_kpi_card(
     )
     ax.add_patch(card_patch)
 
-    # Top accent pill
-    pill_patch = FancyBboxPatch(
-        (0.08, 0.88),
-        0.18,
-        0.05,
+    # Top accent bar spanning gracefully across the card top
+    accent_bar = FancyBboxPatch(
+        (0.15, 0.88),
+        0.70,
+        0.04,
         boxstyle="round,pad=0.01,rounding_size=0.02",
         facecolor=accent_color,
         edgecolor="none",
         transform=ax.transAxes,
         zorder=2,
     )
-    ax.add_patch(pill_patch)
+    ax.add_patch(accent_bar)
 
-    # Card title / label
+    # Card title / label (centered)
     ax.text(
-        0.08,
+        0.50,
         0.70,
         label.upper(),
         color=THEME["text_secondary"],
         fontsize=8,
         fontweight="bold",
+        ha="center",
+        va="center",
         transform=ax.transAxes,
         zorder=3,
     )
 
-    # Main metric value
+    # Main metric value (centered)
     ax.text(
-        0.08,
-        0.35,
+        0.50,
+        0.42,
         value,
         color=accent_color,
-        fontsize=14.5,
+        fontsize=15,
         fontweight="bold",
+        ha="center",
+        va="center",
         transform=ax.transAxes,
         zorder=3,
     )
 
-    # Subtitle or supplementary info
+    # Subtitle or supplementary info (centered)
     if subtitle:
         ax.text(
-            0.08,
-            0.15,
+            0.50,
+            0.18,
             subtitle,
             color=THEME["text_muted"],
             fontsize=7.5,
+            ha="center",
+            va="center",
             transform=ax.transAxes,
             zorder=3,
         )
@@ -872,18 +900,18 @@ def render_complete_dashboard(
     # Create master figure with high resolution
     fig = plt.figure(figsize=(18, 12), dpi=100, facecolor=THEME["main_bg"])
 
-    # Configure top-level GridSpec
-    # Rows: 0=Header (0.38), 1=KPI Cards (0.55), 2=Chart Row 1 (1.4), 3=Chart Row 2 (1.4)
+    # Configure top-level GridSpec with balanced proportions
+    # Rows: 0=Header (0.28), 1=KPI Cards (0.50), 2=Chart Row 1 (1.38), 3=Chart Row 2 (1.38)
     main_gs = gridspec.GridSpec(
         4,
         1,
         figure=fig,
-        height_ratios=[0.38, 0.55, 1.4, 1.4],
-        top=0.96,
-        bottom=0.065,
-        left=0.04,
-        right=0.96,
-        hspace=0.32,
+        height_ratios=[0.28, 0.50, 1.38, 1.38],
+        top=0.965,
+        bottom=0.060,
+        left=0.045,
+        right=0.955,
+        hspace=0.34,
     )
 
     # -------------------------------------------------------------------------
@@ -896,28 +924,31 @@ def render_complete_dashboard(
     # Title & Subtitle
     header_ax.text(
         0.0,
-        0.70,
+        0.66,
         "RETAILPULSE",
         color=THEME["primary"],
         fontsize=20,
         fontweight="bold",
+        va="center",
         transform=header_ax.transAxes,
     )
     header_ax.text(
-        0.14,
-        0.72,
-        "|  Executive Retail Sales Analytics Dashboard",
+        0.135,
+        0.66,
+        "|   Executive Retail Sales Analytics Dashboard",
         color=THEME["text_primary"],
         fontsize=13,
         fontweight="normal",
+        va="center",
         transform=header_ax.transAxes,
     )
     header_ax.text(
         0.0,
         0.18,
-        "Dataset Horizon: January 01, 2019 – March 30, 2019   •   Core Python Analytics Engine   •   Matplotlib Visualizer",
+        "Dataset Horizon: January 01, 2019 – March 30, 2019    •    Core Python Analytics Engine    •    Matplotlib Visualizer",
         color=THEME["text_secondary"],
-        fontsize=9,
+        fontsize=8.5,
+        va="center",
         transform=header_ax.transAxes,
     )
 
@@ -925,18 +956,19 @@ def render_complete_dashboard(
     tx_count = len(records)
     header_ax.text(
         1.0,
-        0.55,
+        0.50,
         f"● ACTIVE DATASET: {tx_count:,} TRANSACTIONS",
         color=THEME["mint"],
-        fontsize=9,
+        fontsize=8.5,
         fontweight="bold",
         ha="right",
+        va="center",
         transform=header_ax.transAxes,
         bbox=dict(
-            boxstyle="round,pad=0.4",
+            boxstyle="round,pad=0.4,rounding_size=0.4",
             facecolor=THEME["panel_bg"],
             edgecolor=THEME["border"],
-            alpha=0.9,
+            alpha=0.95,
         ),
     )
 
@@ -944,7 +976,7 @@ def render_complete_dashboard(
     # 2. KPI Section (5 Cards)
     # -------------------------------------------------------------------------
     kpis = calculate_kpis(records)
-    kpi_gs = gridspec.GridSpecFromSubplotSpec(1, 5, subplot_spec=main_gs[1], wspace=0.12)
+    kpi_gs = gridspec.GridSpecFromSubplotSpec(1, 5, subplot_spec=main_gs[1], wspace=0.14)
 
     kpi_configs = [
         ("Total Revenue", f"${kpis['total_revenue']:,.2f}", THEME["primary"], "Across 3 months"),
@@ -961,8 +993,8 @@ def render_complete_dashboard(
     # -------------------------------------------------------------------------
     # 3. Chart Grid Rows (2 rows x 3 columns)
     # -------------------------------------------------------------------------
-    charts_r1 = gridspec.GridSpecFromSubplotSpec(1, 3, subplot_spec=main_gs[2], wspace=0.22)
-    charts_r2 = gridspec.GridSpecFromSubplotSpec(1, 3, subplot_spec=main_gs[3], wspace=0.22)
+    charts_r1 = gridspec.GridSpecFromSubplotSpec(1, 3, subplot_spec=main_gs[2], wspace=0.24)
+    charts_r2 = gridspec.GridSpecFromSubplotSpec(1, 3, subplot_spec=main_gs[3], wspace=0.24)
 
     # Row 1 Charts
     ax1 = fig.add_subplot(charts_r1[0, 0])
