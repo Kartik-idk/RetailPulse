@@ -7,7 +7,7 @@ Tests for data loader and data processor modules using Python's standard
 `unittest` framework with controlled in-memory sample records.
 """
 
-from datetime import date, datetime
+from datetime import date
 import unittest
 
 from src.data_loader import (
@@ -266,6 +266,24 @@ class TestDataProcessor(unittest.TestCase):
         self.assertEqual(kpis["average_order_value"], 126.0)
         self.assertEqual(kpis["average_rating"], 8.0)
         self.assertEqual(kpis["total_gross_income"], 24.0)
+
+    def test_individual_kpi_functions(self):
+        """Verify individual KPI functions directly on controlled sample data."""
+        self.assertEqual(calculate_total_revenue(self.sample_records), 504.0)
+        self.assertEqual(calculate_total_transactions(self.sample_records), 4)
+        self.assertEqual(calculate_total_units_sold(self.sample_records), 11)
+        self.assertEqual(calculate_average_order_value(self.sample_records), 126.0)
+        self.assertEqual(calculate_average_rating(self.sample_records), 8.0)
+        self.assertEqual(calculate_total_gross_income(self.sample_records), 24.0)
+
+    def test_individual_kpi_functions_empty_data(self):
+        """Verify individual KPI functions handle empty lists without crashing."""
+        self.assertEqual(calculate_total_revenue([]), 0.0)
+        self.assertEqual(calculate_total_transactions([]), 0)
+        self.assertEqual(calculate_total_units_sold([]), 0)
+        self.assertEqual(calculate_average_order_value([]), 0.0)
+        self.assertEqual(calculate_average_rating([]), 0.0)
+        self.assertEqual(calculate_total_gross_income([]), 0.0)
 
     def test_kpis_empty_dataset(self):
         """Empty record list returns zeros safely without ZeroDivisionError."""

@@ -12,7 +12,7 @@ No third-party data processing libraries (e.g. Pandas, NumPy) are used.
 import csv
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 
 # Verified column names expected in the Supermarket Sales dataset.

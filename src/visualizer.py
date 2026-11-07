@@ -11,7 +11,6 @@ No third-party visualization frameworks (e.g. Seaborn, Plotly) are used.
 
 from typing import Any, Dict, List, Optional, Tuple
 
-import matplotlib
 import matplotlib.gridspec as gridspec
 from matplotlib.patches import FancyBboxPatch
 import matplotlib.pyplot as plt

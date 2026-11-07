@@ -9,7 +9,6 @@ analytical summaries, data reload requests, error handling, and orchestrates
 launching Matplotlib visualizations.
 """
 
-from datetime import datetime
 from pathlib import Path
 import sys
 from typing import Any, Dict, List, Optional, Tuple
@@ -488,3 +487,4 @@ def run_terminal_menu(initial_filepath: Path | str = "dataset/supermarket_sales.
         if new_records is not None and new_path is not None:
             records = new_records
             filepath = new_path
+

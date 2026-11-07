@@ -11,7 +11,7 @@ from datetime import date
 from io import StringIO
 from pathlib import Path
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from src.terminal_menu import (
     execute_menu_choice,
