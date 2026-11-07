@@ -133,6 +133,8 @@ The application utilizes the historical **Supermarket Sales** dataset.
 
 ## 📊 Dashboard & Analytics Scope
 
+![RetailPulse Executive Dashboard Preview](dataset/dashboard_preview.png)
+
 - **KPI Cards:**
   - Total Revenue (\$)
   - Total Transactions
@@ -154,6 +156,6 @@ The application utilizes the historical **Supermarket Sales** dataset.
 - [x] **Milestone 1:** Workspace and GitHub Initialization
 - [x] **Milestone 2:** Dataset Acquisition & Verification
 - [x] **Milestone 3:** Core Data Loading & Processing Modules
-- [ ] **Milestone 4:** Matplotlib Visualizations & Dashboard Layout
+- [x] **Milestone 4:** Matplotlib Visualizations & Dashboard Layout
 - [ ] **Milestone 5:** Terminal Interface Integration
 - [ ] **Milestone 6:** Final Testing, Verification, and Documentation
