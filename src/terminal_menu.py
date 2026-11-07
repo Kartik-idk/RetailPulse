@@ -120,10 +120,13 @@ def show_monthly_sales_table(records: List[Dict[str, Any]]) -> None:
         pct = (rev / total_rev * 100) if total_rev > 0 else 0.0
         orders = data["transactions"]
         units = data["units_sold"]
-        print(f"{data['label']:<12} {f'${rev:,.2f}':>16} {f'{pct:.1f}%':>10} {orders:>10} {units:>12}")
+        rev_str = f"${rev:,.2f}"
+        pct_str = f"{pct:.1f}%"
+        print(f"{data['label']:<12} {rev_str:>16} {pct_str:>10} {orders:>10} {units:>12}")
 
     print("-" * 64)
-    print(f"{'Total':<12} {f'${total_rev:,.2f}':>16} {'100.0%':>10} {len(records):>10} {sum(r['Quantity'] for r in records):>12}")
+    tot_rev_str = f"${total_rev:,.2f}"
+    print(f"{'Total':<12} {tot_rev_str:>16} {'100.0%':>10} {len(records):>10} {sum(r['Quantity'] for r in records):>12}")
     print(THIN_SEPARATOR)
 
 
@@ -142,10 +145,15 @@ def show_category_sales_table(records: List[Dict[str, Any]]) -> None:
     for rank, (cat, rev) in enumerate(cat_sales.items(), start=1):
         pct = (rev / total_rev * 100) if total_rev > 0 else 0.0
         income = cat_income.get(cat, 0.0)
-        print(f"{rank:<5} {cat:<26} {f'${rev:,.2f}':>15} {f'{pct:.1f}%':>10} {f'${income:,.2f}':>14}")
+        rev_str = f"${rev:,.2f}"
+        pct_str = f"{pct:.1f}%"
+        inc_str = f"${income:,.2f}"
+        print(f"{rank:<5} {cat:<26} {rev_str:>15} {pct_str:>10} {inc_str:>14}")
 
     print("-" * 74)
-    print(f"{'Total':<31} {f'${total_rev:,.2f}':>15} {'100.0%':>10} {f'${sum(cat_income.values()):,.2f}':>14}")
+    tot_rev_str = f"${total_rev:,.2f}"
+    tot_inc_str = f"${sum(cat_income.values()):,.2f}"
+    print(f"{'Total':<31} {tot_rev_str:>15} {'100.0%':>10} {tot_inc_str:>14}")
     print(THIN_SEPARATOR)
 
 
@@ -163,13 +171,19 @@ def show_branch_performance_table(records: List[Dict[str, Any]]) -> None:
     for b, data in branches.items():
         rev = data["revenue"]
         pct = (rev / total_rev * 100) if total_rev > 0 else 0.0
+        rev_str = f"${rev:,.2f}"
+        pct_str = f"{pct:.1f}%"
+        aov_str = f"${data['average_order_value']:,.2f}"
+        rating_str = f"{data['average_rating']:.2f} ★"
         print(
-            f"Branch {b:<5} {data['city']:<14} {f'${rev:,.2f}':>14} {f'{pct:.1f}%':>9} "
-            f"{data['transactions']:>8} {f'${data["average_order_value"]:,.2f}':>10} {f'{data["average_rating"]:.2f} ★':>8}"
+            f"Branch {b:<5} {data['city']:<14} {rev_str:>14} {pct_str:>9} "
+            f"{data['transactions']:>8} {aov_str:>10} {rating_str:>8}"
         )
 
     print("-" * 79)
-    print(f"{'Total / Avg':<26} {f'${total_rev:,.2f}':>14} {'100.0%':>9} {len(records):>8} {f'${total_rev/len(records):,.2f}':>10} {'--':>8}")
+    tot_rev_str = f"${total_rev:,.2f}"
+    avg_aov_str = f"${total_rev/len(records):,.2f}"
+    print(f"{'Total / Avg':<26} {tot_rev_str:>14} {'100.0%':>9} {len(records):>8} {avg_aov_str:>10} {'--':>8}")
     print(THIN_SEPARATOR)
 
 
@@ -188,12 +202,16 @@ def show_payment_table(records: List[Dict[str, Any]]) -> None:
         pct_c = data["percentage_count"]
         rev = data["revenue"]
         pct_r = data["percentage_revenue"]
-        print(f"{method:<18} {cnt:>10} {f'{pct_c:.1f}%':>12} {f'${rev:,.2f}':>16} {f'{pct_r:.1f}%':>12}")
+        pct_c_str = f"{pct_c:.1f}%"
+        rev_str = f"${rev:,.2f}"
+        pct_r_str = f"{pct_r:.1f}%"
+        print(f"{method:<18} {cnt:>10} {pct_c_str:>12} {rev_str:>16} {pct_r_str:>12}")
 
     print("-" * 72)
     tot_cnt = sum(p["count"] for p in payments.values())
     tot_rev = sum(p["revenue"] for p in payments.values())
-    print(f"{'Total':<18} {tot_cnt:>10} {'100.0%':>12} {f'${tot_rev:,.2f}':>16} {'100.0%':>12}")
+    tot_rev_str = f"${tot_rev:,.2f}"
+    print(f"{'Total':<18} {tot_cnt:>10} {'100.0%':>12} {tot_rev_str:>16} {'100.0%':>12}")
     print(THIN_SEPARATOR)
 
 
@@ -212,12 +230,16 @@ def show_customer_table(records: List[Dict[str, Any]]) -> None:
         pct_c = data["percentage_count"]
         rev = data["revenue"]
         pct_r = data["percentage_revenue"]
-        print(f"{cust_type:<18} {cnt:>10} {f'{pct_c:.1f}%':>12} {f'${rev:,.2f}':>16} {f'{pct_r:.1f}%':>12}")
+        pct_c_str = f"{pct_c:.1f}%"
+        rev_str = f"${rev:,.2f}"
+        pct_r_str = f"{pct_r:.1f}%"
+        print(f"{cust_type:<18} {cnt:>10} {pct_c_str:>12} {rev_str:>16} {pct_r_str:>12}")
 
     print("-" * 72)
     tot_cnt = sum(c["count"] for c in customers.values())
     tot_rev = sum(c["revenue"] for c in customers.values())
-    print(f"{'Total':<18} {tot_cnt:>10} {'100.0%':>12} {f'${tot_rev:,.2f}':>16} {'100.0%':>12}")
+    tot_rev_str = f"${tot_rev:,.2f}"
+    print(f"{'Total':<18} {tot_cnt:>10} {'100.0%':>12} {tot_rev_str:>16} {'100.0%':>12}")
     print(THIN_SEPARATOR)
 
 
@@ -234,10 +256,13 @@ def show_gross_income_table(records: List[Dict[str, Any]]) -> None:
 
     for rank, (cat, inc) in enumerate(cat_income.items(), start=1):
         pct = (inc / total_income * 100) if total_income > 0 else 0.0
-        print(f"{rank:<5} {cat:<28} {f'${inc:,.2f}':>18} {f'{pct:.1f}%':>16}")
+        inc_str = f"${inc:,.2f}"
+        pct_str = f"{pct:.1f}%"
+        print(f"{rank:<5} {cat:<28} {inc_str:>18} {pct_str:>16}")
 
     print("-" * 71)
-    print(f"{'Total':<33} {f'${total_income:,.2f}':>18} {'100.0%':>16}")
+    tot_inc_str = f"${total_income:,.2f}"
+    print(f"{'Total':<33} {tot_inc_str:>18} {'100.0%':>16}")
     print(THIN_SEPARATOR)
 
 
@@ -257,7 +282,8 @@ def show_rating_table(records: List[Dict[str, Any]]) -> None:
         avg = info["average_rating"]
         cnt = info["count"]
         rng = f"[{info['min_rating']:.1f} - {info['max_rating']:.1f}]"
-        print(f"{cat:<26} {f'{avg:.2f} ★':>12} {cnt:>15} {rng:>16}")
+        rating_str = f"{avg:.2f} ★"
+        print(f"{cat:<26} {rating_str:>12} {cnt:>15} {rng:>16}")
 
     print("-" * 73)
     print(THIN_SEPARATOR)
